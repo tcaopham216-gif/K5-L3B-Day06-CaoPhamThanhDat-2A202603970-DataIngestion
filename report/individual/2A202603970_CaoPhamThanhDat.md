@@ -29,9 +29,9 @@
 
 Đường dẫn trace, nhãn thủ công và cách chọn mẫu:
 
-- Trace: [A](../../starter/results/traces_A.jsonl), [B](../../starter/results/traces_B.jsonl), [C](../../starter/results/traces_C.jsonl). Số liệu: [metrics.json](../../starter/results/metrics.json), [metrics.md](../../starter/results/metrics.md), [ingest_stats.json](../../starter/results/ingest_stats.json), [run_info.json](../../starter/results/run_info.json), [audit_summary.json](../../starter/results/audit_summary.json).
+- Trace: [A](../../starter/results/traces_A.jsonl), [B](../../starter/results/traces_B.jsonl), [C](../../starter/results/traces_C.jsonl). Số liệu: [metrics.json](../../starter/results/metrics.json), [metrics.md](../../starter/results/metrics.md), [ingest_stats.json](../../starter/results/ingest_stats.json), [run_info.json](../../starter/results/run_info.json).
 - Nhãn theo rubric thủ công, người gán thực tế là AI: [audit_labels_coherence.csv](../../starter/results/audit_labels_coherence.csv), [audit_labels_test.csv](../../starter/results/audit_labels_test.csv). Coherence lấy @300 tại AOW-p001 đến AOW-p005 và PRN-p001 đến PRN-p005, chọn chunk đầu tiên theo thứ tự xác định khi overlap. Đây là mẫu cố định đầu corpus, không phải mẫu ngẫu nhiên.
-- Audit test lấy mọi câu test và top-three mỗi chiến lược. Metadata tính theo chunk; filter theo câu test có scope; grounding theo toàn bộ bằng chứng của từng câu, không cộng lặp nhãn ở từng rank. Bảng dùng audit_summary.json. A/B đạt scope 2/2 tự nhiên, không có nghĩa đã áp bộ lọc.
+- Audit test lấy mọi câu test và top-three mỗi chiến lược. Metadata tính theo chunk; filter theo câu test có scope; grounding theo toàn bộ bằng chứng của từng câu, không cộng lặp nhãn ở từng rank. Điểm trung bình trong bảng tính trực tiếp từ hai CSV nhãn. A/B đạt scope 2/2 tự nhiên, không có nghĩa đã áp bộ lọc.
 
 ## Phân tích và kết luận
 - So sánh A–B và B–C; 2 ví dụ sai có ID câu và nguồn: A–B giữ model/store/benchmark, đổi chunking. B tăng Hit@1 dev và coherence từ 0.5 lên 1.6, nhưng Hit@3 dev vẫn 8/16. Test A Hit@3 5/6 cao hơn B 4/6; B Hit@1 4/6 so với A 3/6. Test chỉ 6 câu nên chịu biến động mẫu nhỏ; không kết luận B tốt hơn trên mọi thước đo.

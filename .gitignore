@@ -9,8 +9,8 @@ __pycache__/
 .pytest_cache/
 *.sqlite
 
-# Local vector index, model downloads and environments
+# Local vector index, model cache, regenerated pipeline outputs
 chroma_db/
 .cache/
-.venv/
-.env
+starter/data/*.normalized.txt
+starter/results/audit_template_*.csv
