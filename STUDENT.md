@@ -5,4 +5,4 @@
 - Lớp: L3B
 - Chủ đề và corpus: Sun Tzu The Art of War + Machiavelli The Prince (Project Gutenberg #132, #1232)
 - Repo bài nộp: https://github.com/tcaopham216-gif/K5-L3B-Day06-CaoPhamThanhDat-2A202603970-DataIngestionEngineering
-- Commit chốt bài: 110a48b
+- Commit chốt bài: 9ffea73
