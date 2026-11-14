@@ -33,5 +33,3 @@ Benchmark cố định ở [benchmark/questions.jsonl](benchmark/questions.jsonl
 [Báo cáo cá nhân cuối cùng](report/individual/2A202603970_CaoPhamThanhDat.md) · [Rubric](RUBRIC.md)
 
 Kết quả: dev Hit@3 hòa 8/16, Hit@1 B/C 7/16 so với A 5/16 nên chọn B theo quy tắc dev. Test Hit@3 A 5/6, B/C 4/6; mẫu nhỏ nên không khẳng định B luôn tốt hơn. C có cùng kết quả với B trên mọi câu: B chưa lọc đã trả đúng sách ở cả 4 câu filter, nên benchmark chưa chứng minh lợi ích bộ lọc. Coherence A 0.5, B/C 1.6; grounding đều 1.67 theo audit AI.
-
-[Tài liệu tác vụ AI](docs/CODEX_TASK.md).
