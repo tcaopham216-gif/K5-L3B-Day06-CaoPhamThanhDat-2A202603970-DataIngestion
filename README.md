@@ -30,6 +30,6 @@ Benchmark cố định ở [benchmark/questions.jsonl](benchmark/questions.jsonl
 
 Đầu ra: starter/data/units.jsonl, manifest.json; starter/results chứa log ingest, xác minh benchmark, traces A/B/C, metrics, thống kê, run_info, reload_check và hai CSV nhãn audit. Nhãn audit nằm trong starter/results/audit_labels_coherence.csv và audit_labels_test.csv. Labeler là AI: Claude Code điều phối OpenAI Codex CLI hỗ trợ code, benchmark và nhãn audit; sinh viên phải rà soát nhãn, có rủi ro bias. Pipeline và reload check đã chạy thành công. CLI cập nhật artifacts/experiment_log.csv từ kết quả thật và ghim phiên bản chromadb/fastembed sau khi chạy thành công.
 
-[Báo cáo cá nhân cuối cùng](report/individual/MSSV_HoTen.md) · [Rubric](RUBRIC.md)
+[Báo cáo cá nhân cuối cùng](report/individual/2A202603970_CaoPhamThanhDat.md) · [Rubric](RUBRIC.md)
 
 Kết quả: dev Hit@3 hòa 8/16, Hit@1 B/C 7/16 so với A 5/16 nên chọn B theo quy tắc dev. Test Hit@3 A 5/6, B/C 4/6; mẫu nhỏ nên không khẳng định B luôn tốt hơn. C có cùng kết quả với B trên mọi câu: B chưa lọc đã trả đúng sách ở cả 4 câu filter, nên benchmark chưa chứng minh lợi ích bộ lọc. Coherence A 0.5, B/C 1.6; grounding đều 1.67 theo audit AI.
