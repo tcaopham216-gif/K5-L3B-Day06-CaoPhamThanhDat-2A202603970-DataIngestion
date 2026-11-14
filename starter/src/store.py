@@ -1,28 +1,23 @@
-"""TODO: store and search vectors using PostgreSQL + pgvector."""
-from typing import Any
-from .models import Chunk
-
-
-class PgVectorStore:
-    def __init__(self, database_url: str, dimensions: int) -> None:
-        """TODO: retain connection settings; validate model dimensions."""
-        raise NotImplementedError("TODO: initialize store")
-
-    def create_schema(self) -> None:
-        """TODO: create table with vector column and source/page/filter metadata."""
-        raise NotImplementedError("TODO: create_schema")
-
-    def upsert(self, strategy: str, chunks: list[Chunk], vectors: list[list[float]]) -> None:
-        """TODO: validate lengths/dimensions and write stable IDs without duplicates.
-
-        When re-ingesting changed source documents, remove obsolete chunks too.
-        """
-        raise NotImplementedError("TODO: upsert")
-
-    def search(self, strategy: str, query_vector: list[float], top_k: int = 3,
-               filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-        """TODO: filter permitted metadata in SQL, rank by cosine distance, return top-k.
-
-        Return chunk ID, text, score and metadata. Parameterize user-supplied values.
-        """
-        raise NotImplementedError("TODO: search")
+"""Persistent Chroma cosine HNSW (approximate) collections."""
+import math
+import chromadb
+from .ingestion import BASE
+class ChromaStore:
+    def __init__(self,strategy,dimensions=384):
+        self.dimensions=dimensions
+        self.client=chromadb.PersistentClient(path=str(BASE/'chroma_db'))
+        self.collection=self.client.get_or_create_collection('day6_'+('B' if strategy=='C' else strategy),metadata={'hnsw:space':'cosine'})
+    def upsert(self,chunks,vectors):
+        if len(chunks)!=len(vectors) or any(len(v)!=self.dimensions or not all(math.isfinite(x) for x in v) for v in vectors): raise ValueError('Invalid vector dimensions/values')
+        for doc in sorted({c.document_id for c in chunks}):
+            old=set(self.collection.get(where={'document_id':doc})['ids'])
+            current={c.chunk_id for c in chunks if c.document_id==doc}
+            stale=sorted(old-current)
+            if stale: self.collection.delete(ids=stale)
+        for start in range(0,len(chunks),128):
+            batch=chunks[start:start+128]
+            self.collection.upsert(ids=[c.chunk_id for c in batch],documents=[c.text for c in batch],embeddings=vectors[start:start+128],metadatas=[dict(**c.metadata,document_id=c.document_id,source=c.source,page=c.page) for c in batch])
+    def search(self,query_vec,k=3,where=None):
+        if len(query_vec)!=self.dimensions: raise ValueError('Invalid query dimension')
+        r=self.collection.query(query_embeddings=[query_vec],n_results=k,where=where,include=['documents','distances','metadatas'])
+        return [dict(id=i,text=t,score=1-d,metadata=m) for i,t,d,m in zip(r['ids'][0],r['documents'][0],r['distances'][0],r['metadatas'][0])]

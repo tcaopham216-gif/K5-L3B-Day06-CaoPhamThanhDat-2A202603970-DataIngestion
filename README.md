@@ -1,47 +1,37 @@
-# Day 06 · Data Ingestion Engineering
+# Day 06 — Nạp dữ liệu và truy xuất bằng chứng
 
-**Lab cá nhân** · **4 giờ** · **Dữ liệu tự chọn**
+Corpus gồm *The Art of War* (Sun Tzu, bản dịch Lionel Giles) và *The Prince* (Machiavelli, bản dịch W. K. Marriott), từ Project Gutenberg, public domain tại Hoa Kỳ. Nội dung gốc nằm trong starter/data/raw. Chỉ đếm các chương; loại lời mở đầu, giấy phép và hai tác phẩm phụ lục sau chương XXVI của The Prince. Manifest ghi ranh giới dòng và đơn vị nguồn.
 
-Biến tài liệu thành kho tri thức có thể truy xuất cho AI agent, rồi đo xem cách chuẩn bị dữ liệu nào hiệu quả nhất.
+Cài đặt trong Windows PowerShell, từ thư mục gốc:
 
-| 📄 Dữ liệu | 🧩 Chiến lược | 🎯 Benchmark |
-|---|---|---|
-| Tối thiểu **30 trang nội dung** | Tối thiểu **3 cấu hình** | Tối thiểu **20 câu hỏi** |
+```powershell
+cd starter
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --default-timeout=120 -r requirements.txt
+.\.venv\Scripts\python.exe -m src.run
+.\.venv\Scripts\python.exe -m src.run --reload-check
+```
 
-## Bắt đầu nhanh
+Bash (Linux/macOS; thay đường dẫn Python theo môi trường):
 
-Dùng [starter PostgreSQL + pgvector](starter/README.md) để dựng database và hoàn thiện các hàm TODO, hoặc tự chọn vector store tương đương. Starter chỉ là khung: **bạn tự hiện thực pipeline và benchmark**.
+```bash
+cd starter
+python3.12 -m venv .venv
+.venv/bin/python -m pip install --default-timeout=120 -r requirements.txt
+.venv/bin/python -m src.run
+.venv/bin/python -m src.run --reload-check
+```
 
-## 1. Xây pipeline
+Pipeline đã chạy thành công bởi orchestrator bằng venv đường dẫn ngắn. Trên Windows, nên clone vào đường dẫn ngắn như C:\d6 và giữ đường dẫn venv ngắn. starter/.venv ở đường dẫn repo dài đã gặp Windows MAX_PATH khi import grpc: “DLL load failed while importing cygrpc: The filename or extension is too long”. Các lệnh bên trên dùng được khi repo/venv ở đường dẫn ngắn; nếu venv ở nơi khác, thay đường dẫn Python tương ứng. Không chạy đồng thời hai tiến trình cài pip. Lần đầu tải model BAAI/bge-small-en-v1.5 (384 chiều) vào starter/.cache/fastembed. Model chạy local, chi phí dịch vụ bằng 0; lỗi model sẽ dừng pipeline. Chroma lưu trong starter/chroma_db, cosine HNSW là tìm kiếm xấp xỉ. Máy không có pgvector/Docker, nên dùng Chroma.
 
-![Đọc tài liệu, chuẩn hóa, chia chunk, tạo vector, lưu và kiểm tra](assets/ingestion-pipeline.svg)
+A: cửa sổ 500 ký tự, overlap 50. B: nhóm đoạn khoảng 1200 ký tự. C: dùng chung index B, chỉ thêm filter book được cung cấp trong câu hỏi. Câu quá dài được giữ nguyên; nhóm cuối dưới 200 ký tự được ghép vào nhóm trước, nên giới hạn 1200 là giới hạn mềm trong hai trường hợp này. Mỗi chunk có source, document_id, page, book, chapter và offsets để truy vết.
 
-Chọn tài liệu được phép sử dụng; giữ **ID tài liệu, nguồn, trang/vị trí** và metadata phù hợp. Dùng embedding model thật qua API hoặc chạy local; lưu và truy xuất bằng pgvector, Qdrant, Chroma hoặc một store tương đương.
+Benchmark cố định ở [benchmark/questions.jsonl](benchmark/questions.jsonl): 16 dev, 6 test, 4 câu filter (2 test). Test dùng chương khác dev nhưng vẫn có rủi ro trùng chủ đề/tác giả. Chọn theo Evidence Hit@3 trên dev, sau đó Hit@1 và tài nguyên; không tinh chỉnh theo test. Chỉ số đo bằng chứng truy xuất, không phải độ chính xác trả lời LLM.
 
-## 2. So sánh và đánh giá
+Đầu ra: starter/data/units.jsonl, manifest.json, văn bản chuẩn hóa; starter/results chứa log ingest, xác minh benchmark, traces A/B/C, metrics, thống kê, run_info, reload_check và hai CSV audit. Nhãn audit đã có và được tổng hợp tại starter/results/audit_summary.json. Labeler là AI: Claude Code điều phối OpenAI Codex CLI hỗ trợ code, benchmark và nhãn audit; sinh viên phải rà soát nhãn, có rủi ro bias. Pipeline và reload check đã chạy thành công. CLI cập nhật artifacts/experiment_log.csv từ kết quả thật và ghim phiên bản chromadb/fastembed sau khi chạy thành công.
 
-![Ba chiến lược được đánh giá trên cùng corpus và benchmark dev/test](assets/benchmark-workflow.svg)
+[Báo cáo kỹ thuật và trạng thái chạy](docs/IMPLEMENTATION.md) · [Báo cáo cá nhân cuối cùng](report/individual/2A202603970_CaoPhamThanhDat.md) · [Đề bài gốc](docs/LAB_BRIEF.md) · [Rubric](RUBRIC.md)
 
-Dùng cùng dữ liệu, model và câu hỏi cho cả ba cấu hình. Tách **15 câu dev / 5 câu test** trước khi chạy; chọn cấu hình trên dev, rồi đánh giá test sau khi cố định. Mỗi câu hỏi cần có đoạn bằng chứng và trang nguồn; thiết kế bộ câu hỏi và đánh giá theo [BENCHMARK.md](BENCHMARK.md).
+Kết quả: dev Hit@3 hòa 8/16, Hit@1 B/C 7/16 so với A 5/16 nên chọn B theo quy tắc dev. Test Hit@3 A 5/6, B/C 4/6; mẫu nhỏ nên không khẳng định B luôn tốt hơn. C có cùng kết quả với B trên mọi câu: B chưa lọc đã trả đúng sách ở cả 4 câu filter, nên benchmark chưa chứng minh lợi ích bộ lọc. Coherence A 0.5, B/C 1.6; grounding đều 1.67 theo audit AI.
 
-Đánh giá theo năm khía cạnh: **độ chính xác truy xuất**, **tính mạch lạc của chunk**, **tính hữu dụng của metadata**, **chất lượng grounding** và **tác động của chiến lược dữ liệu**. Giải thích lựa chọn bằng kết quả, ví dụ lỗi và các đánh đổi.
-
-## 3. Chuẩn bị bài nộp
-
-1. Chạy pipeline và lưu cấu hình, kết quả top-3, trace cùng nhãn đánh giá thủ công.
-2. Điền [thông tin học viên](STUDENT.md), [nhật ký thí nghiệm](artifacts/experiment_log.csv) và bản sao [mẫu báo cáo cá nhân](report/individual/MSSV_HoTen.md).
-3. Kiểm tra mã nguồn, cách chạy, manifest dữ liệu và checklist trong [SUBMISSION.md](SUBMISSION.md).
-
-## Tài liệu hướng dẫn
-
-| Bạn cần tìm | Tài liệu |
-|---|---|
-| Setup baseline PostgreSQL + pgvector | [starter/README.md](starter/README.md) |
-| Các bước làm và cách tính chỉ số | [GUIDE.md](GUIDE.md) |
-| Tiến độ trong 4 giờ | [CHECKPOINTS.md](CHECKPOINTS.md) |
-| Năm tiêu chí benchmark và bộ câu hỏi | [BENCHMARK.md](BENCHMARK.md) |
-| Tiêu chí chấm điểm | [RUBRIC.md](RUBRIC.md) |
-| Quy tắc sử dụng dữ liệu, AI và API | [RULES.md](RULES.md) |
-| Cách nộp bài | [SUBMISSION.md](SUBMISSION.md) |
-
-[data/format-example.json](data/format-example.json) chỉ minh họa định dạng, không phải corpus đủ điều kiện. Phần xử lý và benchmark do bạn tự hiện thực; không bắt buộc xây chatbot.
+[Tài liệu tác vụ AI](docs/CODEX_TASK.md).

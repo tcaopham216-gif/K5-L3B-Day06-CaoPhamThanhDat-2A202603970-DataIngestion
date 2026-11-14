@@ -1,0 +1,17 @@
+{
+  "before": {
+    "A": 990,
+    "B": 476
+  },
+  "after": {
+    "A": 990,
+    "B": 476
+  },
+  "expected": {
+    "A": 990,
+    "B": 476
+  },
+  "passed": true,
+  "ingestion_passes": 2,
+  "note": "Second ingest reproduced IDs, text and metadata; persisted collections reopened. C reuses B. Real embeddings reused for identical inputs."
+}

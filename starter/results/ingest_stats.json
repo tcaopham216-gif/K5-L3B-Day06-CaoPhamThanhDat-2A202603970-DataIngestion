@@ -1,0 +1,49 @@
+{
+  "A": {
+    "chunk_count": 990,
+    "length_min": 54,
+    "length_mean": 453.64141414141415,
+    "length_median": 500.0,
+    "length_max": 500,
+    "total_chars": 449105,
+    "approx_tokens": 112276.25,
+    "ingest_embed_seconds": 80.90643769999588,
+    "embed_index_seconds": 80.71103869999934,
+    "source_ingest_seconds": 0.19539899999654153,
+    "cost": 0,
+    "query_time_seconds": 0.5942747000008239,
+    "shared_query_embedding_seconds": 0.7164845000006608
+  },
+  "B": {
+    "chunk_count": 476,
+    "length_min": 144,
+    "length_mean": 859.9831932773109,
+    "length_median": 917.0,
+    "length_max": 1296,
+    "total_chars": 409352,
+    "approx_tokens": 102338.0,
+    "ingest_embed_seconds": 73.19295029999194,
+    "embed_index_seconds": 72.9975512999954,
+    "source_ingest_seconds": 0.19539899999654153,
+    "cost": 0,
+    "query_time_seconds": 0.5789160999993328,
+    "shared_query_embedding_seconds": 0.7164845000006608
+  },
+  "C": {
+    "chunk_count": 476,
+    "length_min": 144,
+    "length_mean": 859.9831932773109,
+    "length_median": 917.0,
+    "length_max": 1296,
+    "total_chars": 409352,
+    "approx_tokens": 102338.0,
+    "ingest_embed_seconds": 0,
+    "embed_index_seconds": 0,
+    "source_ingest_seconds": 0,
+    "cost": 0,
+    "shared_index": "B",
+    "resource_note": "Same chunks and index as B; no duplicate ingest/embedding charge.",
+    "query_time_seconds": 0.7768353999999817,
+    "shared_query_embedding_seconds": 0.7164845000006608
+  }
+}

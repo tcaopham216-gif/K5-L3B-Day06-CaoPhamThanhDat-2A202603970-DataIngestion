@@ -1,0 +1,80 @@
+{
+  "A": {
+    "dev": {
+      "Hit@1": {
+        "numerator": 5,
+        "denominator": 16,
+        "rate": 0.3125
+      },
+      "Evidence Hit@3": {
+        "numerator": 8,
+        "denominator": 16,
+        "rate": 0.5
+      }
+    },
+    "test": {
+      "Hit@1": {
+        "numerator": 3,
+        "denominator": 6,
+        "rate": 0.5
+      },
+      "Evidence Hit@3": {
+        "numerator": 5,
+        "denominator": 6,
+        "rate": 0.8333333333333334
+      }
+    }
+  },
+  "B": {
+    "dev": {
+      "Hit@1": {
+        "numerator": 7,
+        "denominator": 16,
+        "rate": 0.4375
+      },
+      "Evidence Hit@3": {
+        "numerator": 8,
+        "denominator": 16,
+        "rate": 0.5
+      }
+    },
+    "test": {
+      "Hit@1": {
+        "numerator": 4,
+        "denominator": 6,
+        "rate": 0.6666666666666666
+      },
+      "Evidence Hit@3": {
+        "numerator": 4,
+        "denominator": 6,
+        "rate": 0.6666666666666666
+      }
+    }
+  },
+  "C": {
+    "dev": {
+      "Hit@1": {
+        "numerator": 7,
+        "denominator": 16,
+        "rate": 0.4375
+      },
+      "Evidence Hit@3": {
+        "numerator": 8,
+        "denominator": 16,
+        "rate": 0.5
+      }
+    },
+    "test": {
+      "Hit@1": {
+        "numerator": 4,
+        "denominator": 6,
+        "rate": 0.6666666666666666
+      },
+      "Evidence Hit@3": {
+        "numerator": 4,
+        "denominator": 6,
+        "rate": 0.6666666666666666
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-strategy,chunking,chunk_size,overlap,metadata,filter,vectorizer,hypothesis,dev_hit1,dev_hit3,test_hit1,test_hit3,notes
-A,,,,,,,,,,,,
-B,,,,,,,,,,,,
-C,,,,,,,,,,,,
+﻿strategy,chunking,chunk_size,overlap,metadata,filter,vectorizer,hypothesis,notes,dev_hit1,dev_hit3,test_hit1,test_hit3
+A,fixed_size,500,50,"source,page,book,chapter,offsets",none,BAAI/bge-small-en-v1.5,Short windows may focus retrieval but cut evidence at boundaries.,AI audit: coherence mean 0.5/2; grounding mean 1.67/2; student review required; small held-out chapter sample; HNSW approximate.,5/16,8/16,3/6,5/6
+B,by_paragraph,1200,0,"source,page,book,chapter,offsets",none,BAAI/bge-small-en-v1.5,Paragraph grouping may preserve more complete evidence with larger context.,AI audit: coherence mean 1.6/2; grounding mean 1.67/2; student review required; small held-out chapter sample; HNSW approximate.,7/16,8/16,4/6,4/6
+C,by_paragraph,1200,0,"source,page,book,chapter,offsets",question input only,BAAI/bge-small-en-v1.5,User-supplied book scope may reduce cross-book ambiguity relative to B.,AI audit: coherence mean 1.6/2; grounding mean 1.67/2; student review required; small held-out chapter sample; HNSW approximate.,7/16,8/16,4/6,4/6

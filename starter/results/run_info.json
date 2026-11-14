@@ -1,0 +1,36 @@
+{
+  "python": "3.12.3 (tags/v3.12.3:f6650f9, Apr  9 2024, 14:05:25) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "libraries": {
+    "chromadb": "1.5.9",
+    "fastembed": "0.9.1",
+    "onnxruntime": "1.32.0",
+    "numpy": "2.5.4"
+  },
+  "model": "BAAI/bge-small-en-v1.5",
+  "dims": 384,
+  "fastembed_version": "0.9.1",
+  "timestamp": "2026-11-14T03:15:29.877838+00:00",
+  "model_load_seconds": 5.745422400003008,
+  "hnsw_approximate": true,
+  "metric": "cosine",
+  "store_path": "C:\\Users\\Admin\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\7b35d6e0-fa9b-4af7-b1de-a65f0c4a7c16\\f79db70a-afd1-42e1-b703-469b9a8d6540\\scratch-2026-11-14-a7fb87\\starter\\chroma_db",
+  "collections": [
+    "day6_A",
+    "day6_B"
+  ],
+  "document_embedding": "embed",
+  "query_embedding": "query_embed",
+  "chunking": {
+    "A": {
+      "size": 500,
+      "overlap": 50
+    },
+    "B": {
+      "max_chars": 1200,
+      "min_chars": 200
+    }
+  },
+  "backend_note": "Chroma selected because pgvector/Docker are unavailable on this machine.",
+  "cost": 0
+}
